@@ -1,0 +1,1081 @@
+// ****************** validation of register page
+import React, { useState } from "react";
+import { Image, Text, View, TextInput, TouchableOpacity } from "react-native";
+import styles from "./style";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
+import Feather from 'react-native-vector-icons/Feather';
+import Error from 'react-native-vector-icons/MaterialIcons';
+
+const Register = () => {
+  const navigation = useNavigation(); // Uncommented for navigation
+  const [name, setName] = useState('');
+  const [nameVerify, setNameVerify] = useState(false);
+
+  const [mobile, setMobile] = useState('');
+  const [mobileVerify, setMobileVerify] = useState(false);
+
+  const [email, setEmail] = useState('');
+  const [emailVerify, setEmailVerify] = useState(false);
+
+  const [password, setPassword] = useState('');
+  const [passwordVerify, setPasswordVerify] = useState(false);
+
+  const handleName = (e) => {
+    const nameVar = e.nativeEvent.text;
+    setName(nameVar);
+    // setNameVerify(false);
+    // if(nameVar.length > 1){
+    //     setNameVerify(true);
+    // }
+    // Update verification logic
+    setNameVerify(nameVar.length > 1);
+  };
+
+  const handleEmail = (e)=>{
+    const emailVar = e.nativeEvent.text;
+    setEmail(emailVar);
+    setEmailVerify(false);
+if(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailVar)){
+    setEmail(emailVar);
+    setEmailVerify(true);
+}    
+
+  }
+
+  return (
+    <View style={styles.mainContainer}>
+      <View style={styles.logoContainer}>
+        <Image
+          style={styles.logo}
+          source={require("../assets/loginPageImage.jpg")}
+        />
+      </View>
+      
+      <View style={styles.loginContainer}>
+        <Text style={styles.text_header}>Register</Text>
+      </View>
+
+      {/* Name Input */}
+      <View style={styles.action}>
+        <FontAwesome name="user-o" color="#420475" style={styles.smallIcon} />
+        <TextInput 
+          placeholder="Name" 
+          style={styles.textInput} 
+          onChange={handleName} // Simplified
+        />
+        {name.length === 0 ? null : (
+          nameVerify ? (
+            <Feather name='check-circle' color='green' size={20} />
+          ) : (
+            <Error name="error" color='red' size={20} /> 
+          )
+        )}
+      </View>
+      {name.length < 1 ? null : nameVerify ? null :<Text style={{
+        marginLeft:20,
+        color:'red'
+      }}>
+        Name should be more then 1 character 
+        
+      </Text> }
+
+      {/* Mobile Input */}
+      <View style={styles.action}>
+        <FontAwesome name="phone" color="#420475" style={styles.smallIcon} />
+        <TextInput 
+          placeholder="Mobile" 
+          style={styles.textInput} 
+          keyboardType="phone-pad" 
+        />
+      </View>
+
+      {/* Email Input */}
+      <View style={styles.action}>
+        <FontAwesome name="envelope-o" color="#420475" style={styles.smallIcon}
+        onChange={handleEmail}
+        />
+        <TextInput 
+          placeholder="Email" 
+          style={styles.textInput} 
+          keyboardType="email-address" 
+        />
+         {email.length === 0 ? null : (
+          emailVerify ? (
+            <Feather name='check-circle' color='green' size={20} />
+          ) : (
+            <Error name="error" color='red' size={20} /> 
+          )
+        )}
+      </View>
+      {email.length < 1 ? null : emailVerify ? null :<Text style={{
+        marginLeft:20,
+        color:'red'
+      }}>
+      Enter Proper Email Address
+        
+      </Text> }
+      {/* Password Input */}
+      <View style={styles.action}>
+        <FontAwesome name="lock" color="#420475" style={styles.smallIcon} />
+        <TextInput 
+          placeholder="Password" 
+          style={styles.textInput} 
+          secureTextEntry 
+        />
+      </View>
+
+      <View style={styles.button}>
+        <TouchableOpacity 
+          style={styles.inBut} 
+          onPress={() => {
+            // You can add registration logic here
+            navigation.navigate("NextScreen"); // Change "NextScreen" to your desired screen
+          }}
+        >
+          <View>
+            <Text style={styles.textSign}>Register</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default Register;
+
+please do correct my code
+
+
+
+
+// ****************** again update registration validation code
+
+import React, { useState } from "react";
+import { Image, Text, View, TextInput, TouchableOpacity } from "react-native";
+import styles from "./style";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
+import Feather from 'react-native-vector-icons/Feather';
+import Error from 'react-native-vector-icons/MaterialIcons';
+
+const Register = () => {
+  const navigation = useNavigation();
+  const [name, setName] = useState('');
+  const [nameVerify, setNameVerify] = useState(false);
+
+  const [mobile, setMobile] = useState('');
+  const [mobileVerify, setMobileVerify] = useState(false);
+
+  const [email, setEmail] = useState('');
+  const [emailVerify, setEmailVerify] = useState(false);
+
+  const [password, setPassword] = useState('');
+  const [passwordVerify, setPasswordVerify] = useState(false);
+
+  const [showPassword,setShowPassword]=useState(false);
+
+  // Function to handle Name input
+  const handleName = (e) => {
+    const nameVar = e.nativeEvent.text;
+    setName(nameVar);
+    setNameVerify(nameVar.length > 1); // Updated to use the condition directly
+  };
+
+  // Function to handle Email input
+  const handleEmail = (e) => {
+    const emailVar = e.nativeEvent.text;
+    setEmail(emailVar);
+    setEmailVerify(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailVar));
+  };
+
+  const handleMobile=(e)=>{
+    const mobileVar = e.nativeEvent.text;
+    setMobile(mobileVar);
+    setMobileVerify(false);
+    if(/[6-9]{1}[0-9]{9}/.test(mobileVar)){
+      setMobile(mobileVar);
+      setMobileVerify(true);
+    }
+  }
+
+  const handlePassword = (e)=>{
+    const passwordVar = e.nativeEvent.text;
+    setPassword(passwordVar);
+    setPasswordVerify(false);
+    if(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(passwordVar)){
+      setPassword(passwordVar);
+      setPasswordVerify(true);
+    }
+  }
+  return (
+    <View style={styles.mainContainer}>
+      <View style={styles.logoContainer}>
+        <Image
+          style={styles.logo}
+          source={require("../assets/loginPageImage.jpg")}
+        />
+      </View>
+
+      <View style={styles.loginContainer}>
+        <Text style={styles.text_header}>Register</Text>
+      </View>
+
+      {/* Name Input */}
+      <View style={styles.action}>
+        <FontAwesome name="user-o" color="#420475" style={styles.smallIcon} />
+        <TextInput
+          placeholder="Name"
+          style={styles.textInput}
+          onChange={handleName}
+        />
+        {name.length === 0 ? null : (
+          nameVerify ? (
+            <Feather name='check-circle' color='green' size={20} />
+          ) : (
+            <Error name="error" color='red' size={20} />
+          )
+        )}
+      </View>
+      {name.length < 1 ? null : !nameVerify && (
+        <Text style={{ marginLeft: 20, color: 'red' }}>
+          Name should be more than 1 character
+        </Text>
+      )}
+
+      {/* Mobile Input */}
+      <View style={styles.action}>
+        <FontAwesome name="phone" color="#420475" style={styles.smallIcon} />
+        <TextInput
+          placeholder="Mobile"
+          style={styles.textInput}
+          keyboardType="phone-pad"
+          // onChangeText={setMobile} // Updated to handle mobile input
+          onChange={handleMobile}
+          maxLength={10}
+        />
+        {mobile.length === 0 ? null : (
+          mobileVerify ? (
+            <Feather name='check-circle' color='green' size={20} />
+          ) : (
+            <Error name="error" color='red' size={20} />
+          )
+        )}
+      </View>
+
+      {mobile.length < 1 ? null : !mobileVerify && (
+        <Text style={{ marginLeft: 20, color: 'red' }}>
+          Phone Number with 6-9 and reamaning 9 digit with 0-9
+        </Text>
+      )}
+
+      {/* Email Input */}
+      <View style={styles.action}>
+        <FontAwesome name="envelope-o" color="#420475" style={styles.smallIcon} />
+        <TextInput
+          placeholder="Email"
+          style={styles.textInput}
+          keyboardType="email-address"
+          onChange={handleEmail}
+        />
+      
+        {email.length === 0 ? null : (
+          emailVerify ? (
+            <Feather name='check-circle' color='green' size={20} />
+          ) : (
+            <Error name="error" color='red' size={20} />
+          )
+        )}
+      </View>
+      {email.length < 1 ? null : !emailVerify && (
+        <Text style={{ marginLeft: 20, color: 'red' }}>
+          Enter a proper email address
+        </Text>
+      )}
+
+      {/* Password Input */}
+      <View style={styles.action}>
+        <FontAwesome name="lock" color="#420475" style={styles.smallIcon} />
+        <TextInput
+          placeholder="Password"
+          style={styles.textInput}
+          secureTextEntry
+          // onChangeText={setPassword} // Added onChangeText for password input
+        onChange={handlePassword}
+        />
+<TouchableOpacity onPress={()=>setShowPassword(!showPassword)}>
+<Feather 
+        name="eye-off"
+        style={{marginRight:-10}}
+        color={'green'}
+        size={23}
+        secureTextEntry={showPassword}
+        
+        />
+
+</TouchableOpacity>
+
+         {/* {password.length === 0 ? null : (
+          passwordVerify ? (
+            <Feather name='check-circle' color='green' size={20} />
+          ) : (
+            <Error name="error" color='red' size={20} />
+          )
+        )} */}
+
+      </View>
+      {/* {password.length < 1 ? null : !passwordVerify && (
+        <Text style={{ marginLeft: 20, color: 'red' }}>
+          Enter a proper email address
+        </Text>
+      )} */}
+
+      <View style={styles.button}>
+        <TouchableOpacity
+          style={styles.inBut}
+          onPress={() => {
+            // Registration logic can be added here
+            navigation.navigate("NextScreen"); // Update to your desired screen
+          }}
+        >
+          <View>
+            <Text style={styles.textSign}>Register</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default Register;
+
+
+
+// **************** Login Page code
+import React from 'react'
+import { Image, Text } from 'react-native'
+import { View } from 'react-native';
+import styles from './style';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { TextInput } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
+
+//scroolview ke liye contentContainerStyle={{flex-grow:1}}
+//scrollview me scroll bar ko chupane ke liye = showVerticalScrollIndicator={false}
+const Login = () => {
+  const navigation = useNavigation();
+  return (
+   <>
+   <View>
+<View style={styles.logoContainer}>
+    <Image style={styles.logo} source={require('../assets/loginPageImage.jpg')}/>
+</View>
+<View style={styles.loginContainer}>
+  <Text style={styles.text_header}>Login !!! </Text>
+</View>
+
+<View style={styles.action}>
+<FontAwesome name='user-o' color='#420475' style={styles.smallIcon}/>
+<TextInput placeholder='Mobile Or Email' style={styles.textInput}/>
+</View>
+
+<View style={styles.action}>
+<FontAwesome name='lock' color='#420475' style={styles.smallIcon}/>
+<TextInput placeholder='Password' style={styles.textInput}/>
+</View>
+<View style={{
+  justifyContent:'flex-end',
+  alignItems:'flex-end',
+  marginTop:8,
+  marginRight:10
+}}>
+  <Text style={{color:'#420475',fontWeight:'700',marginTop:'30'}}>Forgot Password</Text>
+
+</View>
+
+<View style={styles.button}>
+  <TouchableOpacity style={styles.inBut} >
+    <View>
+      <Text style={styles.textSign}>Login</Text>
+    </View>
+
+  </TouchableOpacity>
+  <View style={{padding:15}}>
+    <Text style={{fontSize:14,fontWeight:'bold',color:'#919191'}}>
+      ------or continue as ----
+    </Text>
+  </View>
+  <View style={styles.bottomButton}>
+    <View style={{alignItems:'center',justifyContent:'center'}}>
+      <TouchableOpacity style={styles.inBut}>
+        <FontAwesome name='user-0'
+        color={'white'}
+        style={styles.smallIcon}
+        />
+
+      </TouchableOpacity>
+
+      <Text style={styles.bottomText}>Guest</Text>
+
+    </View>
+
+
+
+    <View style={{alignItems:'center',justifyContent:'center'}}>
+      <TouchableOpacity style={styles.inBut2} onPress={()=>{navigation.navigate('Register')}}>
+        <FontAwesome name='user-plus'
+        color={'white'}
+        style={[styles.smallIcon2,{fontSize:30}]}
+        />
+
+      </TouchableOpacity>
+
+      <Text style={styles.bottomText}>Sign Up</Text>
+
+    </View>
+
+
+
+    <View style={{alignItems:'center',justifyContent:'center'}}>
+      <TouchableOpacity style={styles.inBut2}
+      onPress={()=>alert('Comming Soon')}
+      
+      >
+        <FontAwesome name='google'
+        color={'white'}
+        style={[styles.smallIcon2,{fontSize:30}]}
+        />
+
+      </TouchableOpacity>
+
+      <Text style={styles.bottomText}>Google</Text>
+
+    </View>
+
+
+
+    <View style={{alignItems:'center',justifyContent:'center'}}>
+      <TouchableOpacity style={styles.inBut2}
+      onPress={()=>alert('Comming Soon')}
+      
+      >
+        <FontAwesome name='facebook-f'
+        color={'white'}
+        style={[styles.smallIcon2,{fontSize:30}]}
+        />
+
+      </TouchableOpacity>
+
+      <Text style={styles.bottomText}>Facebook</Text>
+
+    </View>
+
+  </View>
+
+
+  
+</View>
+   </View>
+   
+   </>
+  )
+}
+
+export default Login
+
+
+
+
+//***************************** registr code befor using backend
+import React, { useState } from "react";
+import { Image, Text, View, TextInput, TouchableOpacity } from "react-native";
+import styles from "./style";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
+import Feather from 'react-native-vector-icons/Feather';
+import Error from 'react-native-vector-icons/MaterialIcons';
+import axios from "axios";
+
+const Register = () => {
+  const navigation = useNavigation();
+  const [name, setName] = useState('');
+  const [nameVerify, setNameVerify] = useState(false);
+
+  const [mobile, setMobile] = useState('');
+  const [mobileVerify, setMobileVerify] = useState(false);
+
+  const [email, setEmail] = useState('');
+  const [emailVerify, setEmailVerify] = useState(false);
+
+  const [password, setPassword] = useState('');
+  const [passwordVerify, setPasswordVerify] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  function handleSubmit(){
+    const userData = {
+      name:name,
+      email:email,
+      mobile:mobile,
+      password:password
+    }
+axios.post('http://localhost:5001/register',userData).then((response)=>{
+  console.log(response.data);
+
+}).catch((error)=>{
+  console.log(error);
+})
+
+  }
+
+  // Function to handle Name input
+  const handleName = (e) => {
+    const nameVar = e.nativeEvent.text;
+    setName(nameVar);
+    setNameVerify(nameVar.length > 1);
+  };
+
+  // Function to handle Email input
+  const handleEmail = (e) => {
+    const emailVar = e.nativeEvent.text;
+    setEmail(emailVar);
+    setEmailVerify(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailVar));
+  };
+
+  // Function to handle Mobile input
+  const handleMobile = (e) => {
+    const mobileVar = e.nativeEvent.text;
+    setMobile(mobileVar);
+    // Update mobile verification logic
+    setMobileVerify(/^[6-9][0-9]{9}$/.test(mobileVar));
+  };
+
+  // Function to handle Password input
+  const handlePassword = (e) => {
+    const passwordVar = e.nativeEvent.text;
+    setPassword(passwordVar);
+    // Update password verification logic
+    setPasswordVerify(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(passwordVar));
+  };
+
+  //jab apn keyboard ko upan hi rakhna chahate he matlab apn icon aankh pare click kare jab bhi keyboar open hi rahe  = keyboardShouldPersistTaps={true}
+  return (
+    <View style={styles.mainContainer}>
+      <View style={styles.logoContainer}>
+        <Image
+          style={styles.logo}
+          source={require("../assets/loginPageImage.jpg")}
+        />
+      </View>
+
+      <View style={styles.loginContainer}>
+        <Text style={styles.text_header}>Register</Text>
+      </View>
+
+      {/* Name Input */}
+      <View style={styles.action}>
+        <FontAwesome name="user-o" color="#420475" style={styles.smallIcon} />
+        <TextInput
+          placeholder="Name"
+          style={styles.textInput}
+          onChange={handleName}
+        />
+        {name.length === 0 ? null : (
+          nameVerify ? (
+            <Feather name='check-circle' color='green' size={20} />
+          ) : (
+            <Error name="error" color='red' size={20} />
+          )
+        )}
+      </View>
+      {name.length < 1 ? null : !nameVerify && (
+        <Text style={{ marginLeft: 20, color: 'red' }}>
+          Name should be more than 1 character
+        </Text>
+      )}
+
+      {/* Mobile Input */}
+      <View style={styles.action}>
+        <FontAwesome name="phone" color="#420475" style={styles.smallIcon} />
+        <TextInput
+          placeholder="Mobile"
+          style={styles.textInput}
+          keyboardType="phone-pad"
+          onChange={handleMobile}
+          maxLength={10}
+        />
+        {mobile.length === 0 ? null : (
+          mobileVerify ? (
+            <Feather name='check-circle' color='green' size={20} />
+          ) : (
+            <Error name="error" color='red' size={20} />
+          )
+        )}
+      </View>
+      {mobile.length < 1 ? null : !mobileVerify && (
+        <Text style={{ marginLeft: 20, color: 'red' }}>
+          Phone Number should start with 6-9 followed by 9 digits (0-9).
+        </Text>
+      )}
+
+      {/* Email Input */}
+      <View style={styles.action}>
+        <FontAwesome name="envelope-o" color="#420475" style={styles.smallIcon} />
+        <TextInput
+          placeholder="Email"
+          style={styles.textInput}
+          keyboardType="email-address"
+          onChange={handleEmail}
+        />
+        {email.length === 0 ? null : (
+          emailVerify ? (
+            <Feather name='check-circle' color='green' size={20} />
+          ) : (
+            <Error name="error" color='red' size={20} />
+          )
+        )}
+      </View>
+      {email.length < 1 ? null : !emailVerify && (
+        <Text style={{ marginLeft: 20, color: 'red' }}>
+          Enter a valid email address.
+        </Text>
+      )}
+
+      {/* Password Input */}
+      <View style={styles.action}>
+        <FontAwesome name="lock" color="#420475" style={styles.smallIcon} />
+        <TextInput
+          placeholder="Password"
+          style={styles.textInput}
+          secureTextEntry={!showPassword} // Toggle password visibility
+          onChange={handlePassword}
+        />
+        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          
+          {
+            password.length < 1 ? null : !showPassword ? (
+<Feather
+            name={"eye-off"} // Show/hide password icon
+            style={{ marginRight: -10 }}
+            color={passwordVerify ? 'green' : 'red'}
+            size={23}
+          />
+            ):(
+              <Feather
+            name={"eye"} // Show/hide password icon
+            style={{ marginRight: -10 }}
+            color={passwordVerify ? 'green' : 'red'}
+            size={23}
+          />
+            )
+          }
+          
+          
+          
+          
+          {/* <Feather
+            name={showPassword ? "eye" : "eye-off"} // Show/hide password icon
+            style={{ marginRight: -10 }}
+            color={'green'}
+            size={23}
+          /> */}
+        </TouchableOpacity>
+        {/* {password.length === 0 ? null : (
+          passwordVerify ? (
+            <Feather name='check-circle' color='green' size={20} style={{marginRight:30}}/>
+          ) : (
+            <Error name="error" color='red' size={20} />
+          )
+        )} */}
+      </View>
+      {password.length < 1 ? null : !passwordVerify && (
+        <Text style={{ marginLeft: 20, color: 'red' }}>
+          Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.
+        </Text>
+      )}
+
+      <View style={styles.button}>
+        <TouchableOpacity
+          style={styles.inBut}
+          onPress={()=>handleSubmit()}
+          // onPress={() => {
+          //   // Ensure all fields are verified before navigating
+          //   if (nameVerify && mobileVerify && emailVerify && passwordVerify) {
+          //     navigation.navigate("NextScreen"); // Update to your desired screen
+          //   } else {
+          //     alert("Please fill in all fields correctly.");
+          //   }
+          // }}
+        >
+
+          <View>
+            <Text style={styles.textSign}>Register</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default Register;
+
+
+
+//************** REGISTRATION SUCCESSFULLLY CREATE CODE 
+// Frontend - Register.js
+import React, { useState } from "react";
+import { Image, Text, View, TextInput, TouchableOpacity } from "react-native";
+import styles from "./style";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Feather from 'react-native-vector-icons/Feather';
+import Error from 'react-native-vector-icons/MaterialIcons';
+import axios from "axios";
+
+const Register = () => {
+    // Define state variables for each input field
+    const [name, setName] = useState('');
+    const [nameVerify, setNameVerify] = useState(false);
+
+    const [mobile, setMobile] = useState('');
+    const [mobileVerify, setMobileVerify] = useState(false);
+
+    const [email, setEmail] = useState('');
+    const [emailVerify, setEmailVerify] = useState(false);
+
+    const [password, setPassword] = useState('');
+    const [passwordVerify, setPasswordVerify] = useState(false);
+
+    const [showPassword, setShowPassword] = useState(false);
+
+    // Submit handler to send form data to the backend
+    const handleSubmit = async () => {
+        const userData = {
+            name:name,
+            email:email,
+            mobile:mobile,
+            password:password
+          }
+
+        try {
+            const response = await axios.post('http://localhost:5001/register', userData);
+            console.log(response.data);
+            alert(response.data.data);
+        } catch (error) {
+            console.error("Error creating user:", error.message);
+
+            alert("Error registering user. Please try again.");
+        }
+    };
+
+    // Input handlers with validation
+    const handleName = (e) => {
+        const nameVar = e.nativeEvent.text;
+        setName(nameVar);
+        setNameVerify(nameVar.length > 1);
+    };
+
+    const handleEmail = (e) => {
+        const emailVar = e.nativeEvent.text;
+        setEmail(emailVar);
+        setEmailVerify(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailVar));
+    };
+
+    const handleMobile = (e) => {
+        const mobileVar = e.nativeEvent.text;
+        setMobile(mobileVar);
+        setMobileVerify(/^[6-9][0-9]{9}$/.test(mobileVar));
+    };
+
+    const handlePassword = (e) => {
+        const passwordVar = e.nativeEvent.text;
+        setPassword(passwordVar);
+        setPasswordVerify(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(passwordVar));
+    };
+
+    return (
+        <View style={styles.mainContainer}>
+            {/* Logo Section */}
+            <View style={styles.logoContainer}>
+                <Image
+                    style={styles.logo}
+                    source={require("../assets/loginPageImage.jpg")}
+                />
+            </View>
+
+            {/* Header Text */}
+            <View style={styles.loginContainer}>
+                <Text style={styles.text_header}>Register</Text>
+            </View>
+
+            {/* Name Input */}
+            <View style={styles.action}>
+                <FontAwesome name="user-o" color="#420475" style={styles.smallIcon} />
+                <TextInput
+                    placeholder="Name"
+                    style={styles.textInput}
+                    onChange={handleName}
+                />
+                {name.length === 0 ? null : (
+                    nameVerify ? (
+                        <Feather name='check-circle' color='green' size={20} />
+                    ) : (
+                        <Error name="error" color='red' size={20} />
+                    )
+                )}
+            </View>
+            {name.length < 1 ? null : !nameVerify && (
+                <Text style={{ marginLeft: 20, color: 'red' }}>
+                    Name should be more than 1 character
+                </Text>
+            )}
+
+            {/* Mobile Input */}
+            <View style={styles.action}>
+                <FontAwesome name="phone" color="#420475" style={styles.smallIcon} />
+                <TextInput
+                    placeholder="Mobile"
+                    style={styles.textInput}
+                    keyboardType="phone-pad"
+                    onChange={handleMobile}
+                    maxLength={10}
+                />
+                {mobile.length === 0 ? null : (
+                    mobileVerify ? (
+                        <Feather name='check-circle' color='green' size={20} />
+                    ) : (
+                        <Error name="error" color='red' size={20} />
+                    )
+                )}
+            </View>
+            {mobile.length < 1 ? null : !mobileVerify && (
+                <Text style={{ marginLeft: 20, color: 'red' }}>
+                    Phone number should start with 6-9 followed by 9 digits (0-9).
+                </Text>
+            )}
+
+            {/* Email Input */}
+            <View style={styles.action}>
+                <FontAwesome name="envelope-o" color="#420475" style={styles.smallIcon} />
+                <TextInput
+                    placeholder="Email"
+                    style={styles.textInput}
+                    keyboardType="email-address"
+                    onChange={handleEmail}
+                />
+                {email.length === 0 ? null : (
+                    emailVerify ? (
+                        <Feather name='check-circle' color='green' size={20} />
+                    ) : (
+                        <Error name="error" color='red' size={20} />
+                    )
+                )}
+            </View>
+            {email.length < 1 ? null : !emailVerify && (
+                <Text style={{ marginLeft: 20, color: 'red' }}>
+                    Enter a valid email address.
+                </Text>
+            )}
+
+            {/* Password Input */}
+            <View style={styles.action}>
+                <FontAwesome name="lock" color="#420475" style={styles.smallIcon} />
+                <TextInput
+                    placeholder="Password"
+                    style={styles.textInput}
+                    secureTextEntry={!showPassword}
+                    onChange={handlePassword}
+                />
+                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                    <Feather
+                        name={showPassword ? "eye" : "eye-off"}
+                        color={passwordVerify ? 'green' : 'red'}
+                        size={23}
+                        style={{ marginRight: -10 }}
+                    />
+                </TouchableOpacity>
+            </View>
+            {password.length < 1 ? null : !passwordVerify && (
+                <Text style={{ marginLeft: 20, color: 'red' }}>
+                    Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.
+                </Text>
+            )}
+
+            {/* Register Button */}
+            <View style={styles.button}>
+                <TouchableOpacity style={styles.inBut} onPress={handleSubmit}>
+                    <Text style={styles.textSign}>Register</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    );
+};
+
+export default Register;
+
+
+
+//***************** login page design code without logic 
+import React, { useState } from 'react';
+import { Image, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import styles from './style';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
+import Error from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+
+const Login = () => {
+  const navigation = useNavigation();
+  const [email, setEmail] = useState('');
+  const [emailVerify, setEmailVerify] = useState(false);
+  const [password, setPassword] = useState('');
+  const [passwordVerify, setPasswordVerify] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Function to handle Email input
+  const handleEmail = (e) => {
+    const emailVar = e.nativeEvent.text;
+    setEmail(emailVar);
+    setEmailVerify(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailVar));
+  };
+
+  // Function to handle Password input
+  const handlePassword = (e) => {
+    const passwordVar = e.nativeEvent.text;
+    setPassword(passwordVar);
+    setPasswordVerify(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(passwordVar));
+  };
+
+  // Handle Submit function
+  const handleSubmit = () => {
+    if (emailVerify && passwordVerify) {
+      console.log('Email:', email, 'Password:', password);
+      const userData = {
+        email:email,
+        password:password
+
+      }
+      axios.post('http://localhost:5001/login-user').then((res)=>{
+        console.log(res.data);
+      }).catch((error)=>{
+        console.log(error);
+      })
+    } else {
+      alert("Please enter valid email and password.");
+    }
+  };
+
+
+
+  //scrollView jab ham use kare keyboadShouldPresistTabs = {always} kiyo ki ham kewal ek bar hi login button per click karenge 
+  return (
+    <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image style={styles.logo} source={require('../assets/loginPageImage.jpg')} />
+      </View>
+
+      <View style={styles.loginContainer}>
+        <Text style={styles.text_header}>Login</Text>
+      </View>
+
+      {/* Email Input */}
+      <View style={styles.action}>
+        <FontAwesome name="envelope-o" color="#420475" style={styles.smallIcon} />
+        <TextInput
+          placeholder="Email"
+          style={styles.textInput}
+          keyboardType="email-address"
+          onChange={handleEmail}
+        />
+        {email.length > 0 && (
+          emailVerify ? (
+            <Feather name='check-circle' color='green' size={20} />
+          ) : (
+            <Error name="error" color='red' size={20} />
+          )
+        )}
+      </View>
+      {email.length > 0 && !emailVerify && (
+        <Text style={styles.errorText}>
+          Enter a valid email address.
+        </Text>
+      )}
+
+      {/* Password Input */}
+      <View style={styles.action}>
+        <FontAwesome name="lock" color="#420475" style={styles.smallIcon} />
+        <TextInput
+          placeholder="Password"
+          style={styles.textInput}
+          secureTextEntry={!showPassword}
+          onChange={handlePassword}
+        />
+        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          <Feather
+            name={showPassword ? "eye" : "eye-off"}
+            style={{ marginRight: -10 }}
+            color={passwordVerify ? 'green' : 'red'}
+            size={23}
+          />
+        </TouchableOpacity>
+      </View>
+      {password.length > 0 && !passwordVerify && (
+        <Text style={[styles.errorText, { color: 'red' }]}>
+          Password must be 8-20 characters, with uppercase, lowercase, number, and special character.
+        </Text>
+      )}
+
+      {/* Forgot Password */}
+      <View style={styles.forgotPasswordContainer}>
+        <Text style={styles.forgotPasswordText}>Forgot Password</Text>
+      </View>
+
+      {/* Login Button */}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+
+        {/* Divider Text */}
+        <Text style={styles.dividerText}>------ or continue as ------</Text>
+
+        {/* Bottom Buttons */}
+        <View style={styles.socialButtons}>
+          <View style={styles.socialButtonWrapper}>
+            <TouchableOpacity style={styles.inBut}>
+              <FontAwesome name='user-o' color={'white'} size={20} />
+            </TouchableOpacity>
+            <Text style={styles.bottomText}>Guest</Text>
+          </View>
+
+          <View style={styles.socialButtonWrapper}>
+            <TouchableOpacity style={styles.inBut} onPress={() => navigation.navigate('Register')}>
+              <FontAwesome name='user-plus' color={'white'} size={30} />
+            </TouchableOpacity>
+            <Text style={styles.bottomText}>Sign Up</Text>
+          </View>
+
+          <View style={styles.socialButtonWrapper}>
+            <TouchableOpacity style={styles.inBut} onPress={() => alert('Coming Soon')}>
+              <FontAwesome name='google' color={'white'} size={30} />
+            </TouchableOpacity>
+            <Text style={styles.bottomText}>Google</Text>
+          </View>
+
+          <View style={styles.socialButtonWrapper}>
+            <TouchableOpacity style={styles.inBut} onPress={() => alert('Coming Soon')}>
+              <FontAwesome name='facebook-f' color={'white'} size={30} />
+            </TouchableOpacity>
+            <Text style={styles.bottomText}>Facebook</Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+};
+
+export default Login;
+
+
